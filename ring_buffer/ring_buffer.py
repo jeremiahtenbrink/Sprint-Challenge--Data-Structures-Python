@@ -9,44 +9,33 @@ class RingBuffer:
 
     def append(self, item):
         if self.current == None:
-            self.current = 0
-
-        node = self.storage.head
-        if node is None:
             self.storage.add_to_tail(item)
-            self.current += 1
+            self.current = 1
             return
-        else:
+
+        if self.storage.length == self.capacity:
+            node = self.storage.head
+
             for i in range(self.current):
                 if node.next is not None:
                     node = node.next
-                else:
-                    self.storage.add_to_tail(item)
-                    self.current += 1
-                    if self.current == self.capacity:
-                        self.current = 0
-                    return
+
             node.value = item
-            self.current += 1
-            if self.current == self.capacity:
-                self.current = 0
+        else:
+            self.storage.add_to_tail(item)
 
-
-
-
-
-
+        self.current += 1
+        if self.current == self.capacity:
+            self.current = 0
 
     def get(self):
         # Note:  This is the only [] allowed
         list_buffer_contents = []
-        head = self.storage.head
         node = self.storage.head
         for i in range(self.capacity):
             if node != None:
                 list_buffer_contents.append(node.value)
                 node = node.next
-
 
         return list_buffer_contents
 
@@ -55,10 +44,15 @@ class RingBuffer:
 
 class ArrayRingBuffer:
     def __init__(self, capacity):
-        pass
+        self.capacity = capacity
+        self.current = 0
+        self.storage = [None] * capacity
 
     def append(self, item):
-        pass
+        self.storage[self.current] = item
+        self.current += 1
+        if self.current == self.capacity:
+            self.current = 0
 
     def get(self):
-        pass
+        return [item for item in self.storage if item is not None]
