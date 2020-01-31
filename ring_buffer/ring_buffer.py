@@ -32,10 +32,9 @@ class RingBuffer:
         # Note:  This is the only [] allowed
         list_buffer_contents = []
         node = self.storage.head
-        for i in range(self.capacity):
-            if node != None:
-                list_buffer_contents.append(node.value)
-                node = node.next
+        while node is not None:
+            list_buffer_contents.append(node.value)
+            node = node.next
 
         return list_buffer_contents
 
