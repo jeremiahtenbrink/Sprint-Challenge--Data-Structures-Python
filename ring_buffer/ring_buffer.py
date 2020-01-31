@@ -10,23 +10,23 @@ class RingBuffer:
     def append(self, item):
         if self.current == None:
             self.storage.add_to_tail(item)
-            self.current = 1
+            self.current = self.storage.head
             return
 
         if self.storage.length == self.capacity:
-            node = self.storage.head
+            self.current.value = item
+            if self.current.next is not None:
+                self.current = self.current.next
+            else:
+                self.current = self.storage.head
 
-            for i in range(self.current):
-                if node.next is not None:
-                    node = node.next
-
-            node.value = item
         else:
             self.storage.add_to_tail(item)
+            if self.storage.length == self.capacity:
+                self.current = self.storage.head
+            else:
+                self.current = self.storage.tail
 
-        self.current += 1
-        if self.current == self.capacity:
-            self.current = 0
 
     def get(self):
         # Note:  This is the only [] allowed
